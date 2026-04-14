@@ -8,8 +8,13 @@ if [[ -z "${JUPYTER_PASSWORD:-}" ]]; then
   exit 1
 fi
 
+#ROS_DISTRO="${ROS_DISTRO:-jazzy}"
+#if [[ -f "/opt/ros/${ROS_DISTRO}/setup.bash" ]]; then
+#  source "/opt/ros/${ROS_DISTRO}/setup.bash"
+#fi
+
 PASSWORD_HASH="$(
-python - <<'PY'
+python3.12 - <<'PY'
 import os
 from jupyter_server.auth import passwd
 
@@ -17,7 +22,7 @@ print(passwd(os.environ["JUPYTER_PASSWORD"]))
 PY
 )"
 
-exec jupyter lab \
+exec python3.12 -m jupyter lab \
   --ip=0.0.0.0 \
   --port="${JUPYTER_PORT}" \
   --no-browser \
@@ -25,4 +30,4 @@ exec jupyter lab \
   --ServerApp.token='' \
   --ServerApp.password="${PASSWORD_HASH}" \
   --ServerApp.allow_remote_access=True \
-  --ServerApp.root_dir=/workspace
+  --ServerApp.root_dir=/workspace/notebook
