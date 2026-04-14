@@ -1,0 +1,16 @@
+services:
+  ros-notebook:
+    image: ros-notebook
+    container_name: ros-notebook
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /workspace
+    ports:
+      - "8888:8888"
+    environment:
+      JUPYTER_PORT: 8888
+      JUPYTER_PASSWORD: ${JUPYTER_PASSWORD}
+    volumes:
+      - ./:/workspace
+    restart: unless-stopped
